@@ -24,38 +24,50 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
-/* Play Rock Paper Scissors 5 times, and 
- * announce the winner from best out of 5.
- */
-function playGame() {
-    let playerScore = 0;
-    let computerScore = 0;
-    for (let i = 0; i < 5; i++) {
-        let playerChoice = prompt("Rock, Paper, Scissors!");
-        let computerChoice = getComputerChoice();
-        let result = playRound(playerChoice, computerChoice);
-        console.log(result);
-        switch (result.split(" ")[1]) {
-            case "won!":
-                playerScore += 1;
-                break;
-            case "lost...":
-                computerScore += 1;
-                break;
-            default:
-                break;
-        }
-    }
-    if (playerScore > computerScore) {
-        console.log("You are the winner of the game!");
-    } else if (playerScore < computerScore) {
-        console.log("You lost the game...");
-    } else {
-        console.log("You tied with the computer.");
-    }
+
+const resultDisplayer = document.querySelector('#result-displayer');
+let playerScore = 0;
+let computerScore = 0;
+
+function handleGame(playerChoice) {
+    let computerChoice = getComputerChoice();
+    let result = playRound(playerChoice, computerChoice);
+    resultDisplayer.innerHTML = result;
+    showScore(result);
 }
 
-const btn = document.querySelector('#btn');
-btn.addEventListener('click', (e) => {
-    console.log(e);
-})
+
+const rockBtn = document.querySelector('#rock-button');
+rockBtn.addEventListener('click', (e) => {
+    handleGame('rock');
+});
+
+const paperBtn = document.querySelector('#paper-button');
+paperBtn.addEventListener('click', (e) => {
+    handleGame('paper');
+});
+
+const scissorsBtn = document.querySelector('#scissors-button');
+scissorsBtn.addEventListener('click', (e) => {
+    handleGame('scissors');
+});
+
+
+function showScore(result) {
+    switch (result.split(" ")[1]) {
+        case "won!":
+            playerScore += 1;
+            if (playerScore == 5) {
+                resultDisplayer.innerHTML = "You are the winner of the game!";
+            }
+            break;
+        case "lost...":
+            computerScore += 1;
+            if (computerScore == 5) {
+                resultDisplayer.innerHTML = "You lost the game...";
+            }
+            break;
+        default:
+            break;
+    }
+}
